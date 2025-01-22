@@ -1,0 +1,73 @@
+#!/bin/bash
+
+#Criação dos diretórios publico, adm_p, ven e sec:
+echo 'Criando diretórios...'
+mkdir publico adm_p ven sec
+echo 'Diretórios criados:'
+ls -lat | head -n7
+echo ''
+#Criação dos grupos grp_adm_p, grp_ven, grp_sec:
+echo 'Criando grupos...'
+addgroup grp_adm_p
+addgroup grp_ven
+addgroup grp_sec
+
+echo 'Grupos criados:'
+cat /etc/group | egrep grp_*
+echo ''
+
+#Atribuindo os diretórios aos grupos:
+echo 'Atribuindo diretórios aos grupos...'
+chown :grp_adm_p adm_p
+chown :grp_ven ven
+chown :grp_sec sec
+echo 'Grupos atribuídos:'
+ls -la | egrep grp_*
+
+echo''
+#Atribuindo usuários ao grupo adm_p:
+echo 'Criando usuários ADM e atribuindo ao grupo...'
+useradd carlos -m -c "Carlos" -s /bin/bash -p $(openssl passwd -5 Senha123) -G grp_adm_p
+passwd carlos -e
+
+useradd maria -m -c "Maria" -s /bin/bash -p $(openssl passwd -5 Senha123) -G grp_adm_p
+passwd maria -e
+
+useradd joao -m -c "João" -s /bin/bash -p $(openssl passwd -5 Senha123) -G grp_adm_p
+passwd carlos -e
+echo''
+#Atribuindo usuários ao grupo grp_ven:
+echo 'Criando usuários VEN e atribuindo ao grupo...'
+useradd debora -m -c "Débora" -s /bin/bash -p $(openssl passwd -5 Senha123) -G grp_ven
+passwd debora -e
+
+useradd sebastiana -m -c "Sebastiana" -s /bin/bash -p $(openssl passwd -5 Senha123) -G grp_ven
+passwd sebastiana -e
+
+useradd roberto -m -c "Roberto" -s /bin/bash -p $(openssl passwd -5 Senha123) -G grp_ven
+passwd roberto -e
+
+echo''
+#Atribuindo usuários ao grupo grp_sec:
+echo 'Criando usuários SEC e atribuindo ao grupo...'
+useradd josefina -m -c "Josefina" -s /bin/bash -p $(openssl passwd -5 Senha123) -G grp_sec
+passwd josefina -e
+
+useradd amanda -m -c "Amanda" -s /bin/bash -p $(openssl passwd -5 Senha123) -G grp_sec
+passwd amanda -e
+
+useradd rogerio -m -c "Rogério" -s /bin/bash -p $(openssl passwd -5 Senha123) -G grp_sec
+passwd rogerio -e
+
+echo ''
+#Aplicando permissõe:
+echo 'Aplicando permissões aos diretórios...'
+chmod 770 adm_p
+chmod 770 ven
+chmod 770 sec
+chmod 777 publico
+echo 'Permissões aplicadas:'
+ls -lat | head -n6
+echo''
+echo 'Finalizado!'
+
